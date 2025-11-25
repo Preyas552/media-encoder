@@ -1,0 +1,1 @@
+ALTER TABLE jobs ADD COLUMN output_format VARCHAR(10) NOT NULL DEFAULT 'mp4';

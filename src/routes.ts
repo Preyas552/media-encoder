@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { s3Client, BUCKET_UPLOADS } from './s3';
+import { s3Client, BUCKET_UPLOADS, getSignedDownloadUrl } from './s3';
 import { query } from './db';
+import path from 'path';
 import fs from 'fs';
 import { createClient } from 'redis';
 
@@ -49,11 +50,13 @@ router.post('/jobs', upload.single('file'), async (req, res) => {
             throw dbError;
         }
 
+        const outputFormat = req.body.output_format || 'mp4';
+
         const jobRes = await query(
-            `INSERT INTO jobs (user_id, job_type, status, input_filename, input_size_bytes)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id, status, created_at`,
-            [userId, 'transcode', 'pending', originalname, size]
+            `INSERT INTO jobs (user_id, job_type, status, input_filename, input_size_bytes, output_format)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, status, created_at, output_format`,
+            [userId, 'transcode', 'pending', originalname, size, outputFormat]
         );
 
         // Cleanup local file
@@ -82,7 +85,22 @@ router.get('/jobs/:id', async (req, res) => {
             return res.status(404).json({ error: 'Job not found' });
         }
 
-        res.json({ job: result.rows[0] });
+        const job = result.rows[0];
+
+        if (job.status === 'completed') {
+            const filenameBase = path.parse(job.input_filename).name;
+            const outputFormat = job.output_format || 'mp4'; // Default to mp4 if null (legacy jobs)
+            const outputKey = `processed_${filenameBase}.${outputFormat}`;
+
+            try {
+                const downloadUrl = await getSignedDownloadUrl(outputKey);
+                (job as any).downloadUrl = downloadUrl;
+            } catch (err) {
+                console.error('Error generating signed URL:', err);
+            }
+        }
+
+        res.json({ job });
     } catch (error: any) {
         console.error(error);
         res.status(500).json({ error: error.message });

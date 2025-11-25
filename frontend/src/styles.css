@@ -1,0 +1,234 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --primary: #2563eb;
+  --danger: #b91c1c;
+  --success: #16a34a;
+  --gray-100: #f3f4f6;
+  --gray-600: #4b5563;
+  --gray-900: #0f172a;
+  --background-black: #000000;
+  --box-greyish: #2d2d2d;
+  --font-white: #ffffff;
+  --gray-400: #9ca3af;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: var(--background-black);
+  color: var(--font-white);
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 24px 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin: 0 0 16px 0;
+}
+
+h3 {
+  font-size: 1.1rem;
+  margin: 16px 0 8px 0;
+  font-weight: 600;
+}
+
+.card {
+  background: var(--box-greyish);
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(2, 6, 23, 0.06);
+  margin-bottom: 16px;
+  color: var(--font-white);
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--gray-400);
+}
+
+input[type=file] {
+  padding: 8px;
+  border: 1px solid #444444;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--box-greyish);
+  color: var(--font-white);
+}
+
+input[type=text] {
+  padding: 8px 12px;
+  border: 1px solid #444444;
+  border-radius: 4px;
+  font-size: 14px;
+  background: var(--box-greyish);
+  color: var(--font-white);
+}
+
+input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.row input {
+  flex: 1;
+}
+
+button {
+  background: var(--primary);
+  color: var(--font-white);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.progress-bar {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background: #444444;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #1d4ed8);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--font-white);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.error {
+  color: var(--font-white);
+  background: var(--danger);
+  padding: 12px;
+  border-radius: 4px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.info {
+  /* informational box — dark subtle background with white text */
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 8px 0;
+  font-size: 14px;
+  color: var(--font-white);
+  background: rgba(255,255,255,0.03);
+}
+
+/* Make rows wrap on narrow screens so inputs/buttons don't overflow */
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.row input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Use theme variables for footer border to be consistent */
+footer {
+  margin-top: 24px;
+  color: var(--gray-600);
+  font-size: 12px;
+  text-align: center;
+  padding-top: 12px;
+  border-top: 1px solid #444444;
+}
+
+.meta {
+  background: #1f2937;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 12px 0;
+  color: var(--font-white);
+}
+
+.meta p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+code {
+  background: #444444;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--font-white);
+}
+
+.job-details {
+  margin: 16px 0;
+}
+
+.job-json {
+  background: var(--gray-900);
+  color: #cbd5e1;
+  padding: 12px;
+  border-radius: 6px;
+  overflow: auto;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 8px 0;
+}
+
+footer {
+  margin-top: 24px;
+  color: var(--gray-600);
+  font-size: 12px;
+  text-align: center;
+  padding-top: 12px;
+  border-top: 1px solid #444444;
+}

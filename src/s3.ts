@@ -1,4 +1,5 @@
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,3 +16,11 @@ export const s3Client = new S3Client({
 
 export const BUCKET_UPLOADS = process.env.S3_BUCKET_UPLOADS || 'media-uploads';
 export const BUCKET_PROCESSED = process.env.S3_BUCKET_PROCESSED || 'media-processed';
+
+export const getSignedDownloadUrl = async (key: string) => {
+    const command = new GetObjectCommand({
+        Bucket: BUCKET_PROCESSED,
+        Key: key,
+    });
+    return getSignedUrl(s3Client, command, { expiresIn: 3600 }); // 1 hour
+};

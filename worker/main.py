@@ -44,27 +44,30 @@ def process_job(job_id):
     try:
         # Get job details
         with conn.cursor() as cur:
-            cur.execute("SELECT input_filename FROM jobs WHERE id = %s", (job_id,))
+            cur.execute("SELECT input_filename, output_format FROM jobs WHERE id = %s", (job_id,))
             result = cur.fetchone()
             if not result:
                 print(f"Job {job_id} not found in DB")
                 return
             input_filename = result[0]
+            output_format = result[1]
 
         update_job_status(job_id, 'processing')
 
         # Download from S3
         local_input = f"/tmp/{input_filename}"
-        local_output = f"/tmp/processed_{input_filename}"
+        # Ensure output filename has correct extension
+        filename_base = os.path.splitext(input_filename)[0]
+        local_output = f"/tmp/processed_{filename_base}.{output_format}"
         
         print(f"Downloading {input_filename} from S3...")
         s3.download_file(S3_BUCKET_UPLOADS, input_filename, local_input)
 
         # Transcode
-        if transcode_video(local_input, local_output):
+        if transcode_video(local_input, local_output, output_format):
             # Upload to S3
             print(f"Uploading {local_output} to S3...")
-            s3.upload_file(local_output, S3_BUCKET_PROCESSED, f"processed_{input_filename}")
+            s3.upload_file(local_output, S3_BUCKET_PROCESSED, f"processed_{filename_base}.{output_format}")
             
             update_job_status(job_id, 'completed')
         else:
